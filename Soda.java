@@ -54,6 +54,15 @@ public class Soda extends JFrame {
         int result = fileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
+            javac /Users/emicraftnoob/Documents/sodacode/soda.java;
+            // Verificar la extensión del archivo
+            String fileName = file.getName();
+            String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
+            if (extension.equalsIgnoreCase("png") || extension.equalsIgnoreCase("jpg")) {
+                // Mostrar mensaje de advertencia informativa
+                JOptionPane.showMessageDialog(this, "The content of this file is binary and it can be very difficult to edit", "Note", JOptionPane.INFORMATION_MESSAGE);
+            }
+
             try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
                 StringBuilder sb = new StringBuilder();
                 String line;
@@ -63,7 +72,7 @@ public class Soda extends JFrame {
                 textArea.setText(sb.toString());
             } catch (IOException ex) {
                 ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Error al abrir el archivo", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Error opening file", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -79,7 +88,7 @@ public class Soda extends JFrame {
                 writer.print(textArea.getText());
             } catch (IOException ex) {
                 ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Error al guardar el archivo", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Error saving file", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
