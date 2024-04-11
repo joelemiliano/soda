@@ -2,10 +2,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import javax.swing.undo.*;
+import javax.swing.event.*;
 
 public class Soda extends JFrame {
     private JTextArea textArea;
     private JFileChooser fileChooser;
+    private UndoManager undoManager;
 
     public Soda() {
         setTitle("Soda");
@@ -19,6 +22,18 @@ public class Soda extends JFrame {
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
 
+        // Crear la pestaña "Soda"
+        JMenu sodaMenu = new JMenu("Soda");
+        menuBar.add(sodaMenu);
+
+        JMenuItem exitMenuItem = new JMenuItem("Exit");
+        exitMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                exitProgram();
+            }
+        });
+        sodaMenu.add(exitMenuItem);
+        
         JMenu fileMenu = new JMenu("File");
         menuBar.add(fileMenu);
 
@@ -45,6 +60,38 @@ public class Soda extends JFrame {
             }
         });
         fileMenu.add(saveMenuItem);
+        
+        // Crear la pestaña "Edit"
+        JMenu editMenu = new JMenu("Edit");
+        menuBar.add(editMenu);
+        
+        JMenuItem undoMenuItem = new JMenuItem("Undo");
+        undoMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (undoManager.canUndo()) {
+                    undoManager.undo();
+                }
+            }
+        });
+        editMenu.add(undoMenuItem);
+        
+        JMenuItem redoMenuItem = new JMenuItem("Redo");
+        redoMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (undoManager.canRedo()) {
+                    undoManager.redo();
+                }
+            }
+        });
+        editMenu.add(redoMenuItem);
+
+        // Inicializar UndoManager
+        undoManager = new UndoManager();
+        textArea.getDocument().addUndoableEditListener(new UndoableEditListener() {
+            public void undoableEditHappened(UndoableEditEvent e) {
+                undoManager.addEdit(e.getEdit());
+            }
+        });
     }
 
     private void openFile() {
@@ -54,11 +101,11 @@ public class Soda extends JFrame {
         int result = fileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
-            javac /Users/emicraftnoob/Documents/sodacode/soda.java;
+
             // Verificar la extensión del archivo
             String fileName = file.getName();
             String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
-            if (extension.equalsIgnoreCase("png") || extension.equalsIgnoreCase("jpg")) {
+            if (extension.equalsIgnoreCase("png") || extension.equalsIgnoreCase("jpg") || extension.equalsIgnoreCase("mp4")) {
                 // Mostrar mensaje de advertencia informativa
                 JOptionPane.showMessageDialog(this, "The content of this file is binary and it can be very difficult to edit", "Note", JOptionPane.INFORMATION_MESSAGE);
             }
@@ -90,6 +137,13 @@ public class Soda extends JFrame {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(this, "Error saving file", "Error", JOptionPane.ERROR_MESSAGE);
             }
+        }
+    }
+
+    private void exitProgram() {
+        int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to exit?", "Confirm Exit", JOptionPane.YES_NO_OPTION);
+        if (option == JOptionPane.YES_OPTION) {
+            System.exit(0);
         }
     }
 
