@@ -1,9 +1,9 @@
 import javax.swing.*;
+import javax.swing.undo.*;
+import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import javax.swing.undo.*;
-import javax.swing.event.*;
 
 public class Soda extends JFrame {
     private JTextArea textArea;
@@ -14,6 +14,12 @@ public class Soda extends JFrame {
         setTitle("Soda");
         setSize(800, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        // Mostrar un mensaje de bienvenida
+        JOptionPane.showMessageDialog(this,
+                "Welcome to Soda code editor 0.1!\n\nThis program is in development and can contain some or many errors.\n\nLet me know about any issue here:\n\nhttps://github.com/joelemiliano/soda/issues",
+                "Welcome",
+                JOptionPane.INFORMATION_MESSAGE);
 
         textArea = new JTextArea();
         JScrollPane scrollPane = new JScrollPane(textArea);
@@ -90,6 +96,30 @@ public class Soda extends JFrame {
         textArea.getDocument().addUndoableEditListener(new UndoableEditListener() {
             public void undoableEditHappened(UndoableEditEvent e) {
                 undoManager.addEdit(e.getEdit());
+            }
+        });
+
+        // Atajos de teclado para deshacer y rehacer
+        InputMap inputMap = textArea.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = textArea.getActionMap();
+
+        KeyStroke undoKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+        inputMap.put(undoKeyStroke, "undo");
+        actionMap.put("undo", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                if (undoManager.canUndo()) {
+                    undoManager.undo();
+                }
+            }
+        });
+
+        KeyStroke redoKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+        inputMap.put(redoKeyStroke, "redo");
+        actionMap.put("redo", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                if (undoManager.canRedo()) {
+                    undoManager.redo();
+                }
             }
         });
     }
