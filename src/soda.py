@@ -17,11 +17,6 @@ class SodaEditor:
             "Welcome to Soda code editor 0.1.1!\n\nThis program is in development and can contain some or many errors.\n\nLet me know about any issue here:\n\nhttps://github.com/joelemiliano/soda/issues"
         )
 
-        # Load background image
-        self.bg_image = PhotoImage(file="icongrayscale.png")  # Your background image
-        self.bg_label = tk.Label(self.root, image=self.bg_image)
-        self.bg_label.place(relwidth=1, relheight=1)  # Fill the entire window
-
         # Create Text widget
         self.text_area = tk.Text(self.root, wrap="word", undo=True, highlightthickness=0, font='TkFixedFont')
         self.text_area.pack(expand=True, fill="both")
@@ -34,9 +29,6 @@ class SodaEditor:
 
         # Bind the Text widget to check for changes (e.g., when typing)
         self.text_area.bind("<KeyRelease>", self.check_empty)
-
-        # Initial check to update background based on text area content
-        self.check_empty()
 
     def create_menu(self):
         menu_bar = tk.Menu(self.root)
@@ -86,14 +78,6 @@ class SodaEditor:
 
     def redo(self):
         self.text_area.edit_redo()
-
-    def check_empty(self, event=None):
-        """Check if the text area is empty and update the background image."""
-        # Check if the Text widget is empty
-        if not self.text_area.get("1.0", "end-1c").strip():  # Text widget is empty
-            self.bg_label.place(relwidth=1, relheight=1)  # Show background image
-        else:
-            self.bg_label.place_forget()  # Remove the background image
 
     def exit_program(self):
         if messagebox.askyesno("Confirm Exit", "Are you sure you want to exit?"):
