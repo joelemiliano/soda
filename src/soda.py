@@ -14,7 +14,7 @@ class SodaEditor:
 
         # Welcome message
         messagebox.showinfo("Welcome", 
-            "Welcome to Soda code editor 0.1.1!\n\nThis program is in development and can contain some or many errors.\n\nLet me know about any issue here:\n\nhttps://github.com/joelemiliano/soda/issues"
+            "Welcome to Soda code editor 0.2!\n\nThis program is in development and can contain some or many errors.\n\nLet me know about any issue here:\n\nhttps://github.com/joelemiliano/soda/issues"
         )
 
         # Create Text widget
