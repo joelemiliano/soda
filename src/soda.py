@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import PhotoImage, messagebox, filedialog
+import tkinter.font
 
 class SodaEditor:
     def __init__(self, root):
@@ -22,7 +23,7 @@ class SodaEditor:
         self.bg_label.place(relwidth=1, relheight=1)  # Fill the entire window
 
         # Create Text widget
-        self.text_area = tk.Text(self.root, wrap="word", undo=True)
+        self.text_area = tk.Text(self.root, wrap="word", undo=True, highlightthickness=0, font='TkFixedFont')
         self.text_area.pack(expand=True, fill="both")
 
         # Create Menu Bar
